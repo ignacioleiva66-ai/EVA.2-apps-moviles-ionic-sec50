@@ -1,0 +1,68 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Lista de tareas</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div class="page-wrapper">
+    <section class="task-form" aria-labelledby="new-task-heading">
+      <h1 id="new-task-heading">Nueva tarea</h1>
+
+      <ion-item>
+        <ion-input
+          label="Título"
+          labelPlacement="stacked"
+          placeholder="Ej. Comprar víveres"
+          [(ngModel)]="newTaskTitle"
+          (keyup.enter)="addTask()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-item>
+        <ion-input
+          label="Descripción"
+          labelPlacement="stacked"
+          placeholder="Añade detalles (opcional)"
+          [(ngModel)]="newTaskDescription"
+          (keyup.enter)="addTask()"
+        ></ion-input>
+      </ion-item>
+
+      <ion-button expand="block" (click)="addTask()" [disabled]="!newTaskTitle.trim()">
+        <ion-icon name="add-outline" slot="start"></ion-icon>
+        Guardar tarea
+      </ion-button>
+    </section>
+
+    <section aria-labelledby="tasks-heading">
+      <h2 id="tasks-heading">Mis tareas</h2>
+
+      @if (tasks().length === 0) {
+        <p class="empty-state">Todavía no tienes tareas. ¡Añade la primera!</p>
+      } @else {
+        <ion-list lines="full">
+          @for (task of tasks(); track $index) {
+            <ion-item>
+              <ion-label>
+                <h3>{{ task.title }}</h3>
+                @if (task.description) {
+                  <p>{{ task.description }}</p>
+                }
+              </ion-label>
+              <ion-button
+                fill="clear"
+                color="danger"
+                slot="end"
+                [attr.aria-label]="'Eliminar tarea ' + task.title"
+                (click)="removeTask($index)"
+              >
+                <ion-icon name="trash-outline"></ion-icon>
+              </ion-button>
+            </ion-item>
+          }
+        </ion-list>
+      }
+    </section>
+  </div>
+</ion-content>
