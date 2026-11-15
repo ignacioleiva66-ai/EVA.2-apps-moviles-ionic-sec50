@@ -1,7 +1,7 @@
 {
-  "name": "todo-app-scaffold",
-  "version": "0.0.1",
-  "author": "Ionic Framework",
+  "name": "EVA.2-apps-moviles-ionic-sec50",
+  "version": "0.0.2",
+  "author": "Ignacio Leiva - IPSS",
   "homepage": "https://ionicframework.com/",
   "scripts": {
     "ng": "ng",
@@ -21,9 +21,12 @@
     "@angular/platform-browser-dynamic": "22.2.3",
     "@angular/router": "22.2.3",
     "@capacitor/app": "8.1.2",
+    "@capacitor/camera": "^8.0.0",
     "@capacitor/core": "8.6.0",
+    "@capacitor/geolocation": "^8.0.0",
     "@capacitor/haptics": "8.0.2",
     "@capacitor/keyboard": "8.0.6",
+    "@capacitor/preferences": "^8.0.0",
     "@capacitor/status-bar": "8.0.4",
     "@ionic/angular": "^9.0.0",
     "ionicons": "^8.1.0",
@@ -44,5 +47,5 @@
     "typescript-eslint": "^8.61.0",
     "vitest": "~5.0.5"
   },
-  "description": "An Ionic project"
+  "description": "Aplicación Móvil Lista de Tareas con Cámara, GPS, Sincronización Web API y Persistencia Offline - Unidad 2 IPSS"
 }

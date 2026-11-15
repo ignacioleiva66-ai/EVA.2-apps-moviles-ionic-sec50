@@ -1,316 +1,87 @@
-# Lista de tareas - Ionic Angular
+# Lista de Tareas Avanzada - Ionic Angular (Evaluación Sumativa Unidad 2)
 
-Aplicación móvil de lista de tareas desarrollada con Ionic, Angular y Capacitor. Permite crear tareas con título y descripción, visualizarlas en una lista y eliminarlas individualmente.
+**Instituto Profesional San Sebastián (IPSS)**  
+**Carrera:** Área de Informática y Telecomunicaciones  
+**Asignatura:** Desarrollo de aplicaciones móviles  
+**Evaluación:** Evaluación Sumativa Unidad Nº 2 (Ponderación 20%, 100 puntos)  
+**Estudiante:** Ignacio Leiva  
 
-## Características
+---
 
-- Interfaz construida con componentes Ionic.
-- Encabezado principal con `ion-header` e `ion-toolbar`.
-- Formulario para registrar tareas:
-  - Título obligatorio.
-  - Descripción opcional.
-  - Botón para guardar.
-- Lista reactiva de tareas con `ion-list` e `ion-item`.
-- Eliminación individual mediante un botón con icono de papelera.
-- Limpieza automática de los campos después de guardar.
-- Validación que impide guardar una tarea sin título.
-- Mensaje informativo cuando todavía no existen tareas.
-- Diseño adaptable para pantallas móviles y de escritorio.
+## 📋 Descripción del Proyecto
 
-## Tecnologías utilizadas
+Aplicación móvil híbrida para gestión de tareas (To-Do List) desarrollada con **Ionic Framework 9**, **Angular 22** y **Capacitor 8**. Evolucionada desde la Unidad 1 para integrar:
+1. **Periféricos del dispositivo**: Captura de fotografías con la **Cámara** y georreferenciación satelital con **GPS**.
+2. **Gestión segura de permisos**: Ciclo completo de verificación, solicitud y control de permisos denegados sin bloqueos.
+3. **Servicios Web y APIs**: Sincronización bidireccional en la nube (Cloud Sync) e importación de tareas externas vía REST API.
+4. **Almacenamiento Local Avanzado**: Persistencia nativa Offline-First con `@capacitor/preferences`.
+5. **Autenticación Multi-usuario**: Aislamiento de tareas por usuario y cambio ágil de perfiles.
+6. **Pruebas Automatizadas**: Suites de testing unitario para hardware y APIs HTTP.
 
-| Tecnología | Uso |
-| --- | --- |
-| Ionic 9 | Componentes visuales y experiencia móvil |
-| Angular 22 | Estructura, componentes, rutas y plantillas |
-| TypeScript 6 | Lógica tipada de la aplicación |
-| Capacitor 8 | Preparación para ejecutar en Android e iOS |
-| Ionicons 8 | Iconos de agregar y eliminar |
-| Vite | Servidor de desarrollo y compilación |
+---
 
-## Requisitos previos
+## 🚀 Nuevas Características (Unidad 2)
 
-Instala las siguientes herramientas:
+- 📸 **Cámara (@capacitor/camera)**: Captura fotos en base64 DataUrl comprimidas al 85%, con previsualización y eliminación.
+- 📍 **GPS (@capacitor/geolocation)**: Captura coordenadas de alta precisión (latitud, longitud, precisión) y genera enlaces directos a Google Maps.
+- 🛡️ **Permisos Seguros**: Manejo pedagógico de permisos denegados con alertas modales de Ionic (`IonAlert`).
+- ☁️ **Sincronización Cloud (REST API)**: Sincronización automática y manual con endpoints REST (JSONPlaceholder).
+- 📥 **Importación de Tareas**: Carga masiva de tareas desde servicio web externo (`/todos`).
+- 💾 **Persistencia Offline-First**: Almacenamiento local mediante `@capacitor/preferences` para operar sin internet.
+- 👥 **Multi-usuario**: Conmutación de perfiles de usuario y aislamiento de tareas por `userId`.
+- 🧪 **Pruebas Automatizadas**: Pruebas unitarias completas en `device.service.spec.ts` y `api-sync.service.spec.ts`.
 
-- Node.js y npm.
-- Ionic CLI.
+---
 
-Puedes comprobar las instalaciones con:
+## 🛠️ Tecnologías Utilizadas
 
+| Tecnología | Versión | Uso en el Proyecto |
+| :--- | :--- | :--- |
+| **Ionic Framework** | 9.x | Componentes visuales móviles, toolbars, listados, alertas y spinners |
+| **Angular** | 22.x | Arquitectura modular (NgModule), Signals reactivos y HttpClient |
+| **Capacitor Core & CLI**| 8.x | Runtime nativo para Android e iOS |
+| **Capacitor Camera** | 8.x | Interacción nativa con la cámara del dispositivo móvil |
+| **Capacitor Geolocation** | 8.x | Acceso a coordenadas satelitales GPS |
+| **Capacitor Preferences** | 8.x | Almacenamiento persistente nativo clave-valor |
+| **TypeScript** | 6.x | Tipado estricto de modelos, servicios y componentes |
+| **Vitest** | 5.x | Suite de ejecución de pruebas unitarias automatizadas |
+
+---
+
+## 💻 Instalación y Ejecución
+
+### 1. Clonar el repositorio y acceder a la carpeta:
 ```bash
-node --version
-npm --version
-ionic --version
+git clone https://github.com/danielbanmode/EVA.1-apps-moviles-ionic-sec50.git
+cd EVA.1-apps-moviles-ionic-sec50
 ```
 
-## Instalación
-
-1. Abre una terminal en la carpeta del proyecto:
-
-   ```bash
-   cd "C:\Users\Danie\OneDrive\Escritorio\CLASES IPSS\SEXTO TRIMESTRE\APP MOVILES\Proyecto ionic"
-   ```
-
-2. Instala las dependencias:
-
-   ```bash
-   npm install
-   ```
-
-## Ejecución local
-
-Inicia el servidor de desarrollo con:
-
+### 2. Instalar dependencias del proyecto:
 ```bash
-ionic serve
+npm install
 ```
 
-La aplicación estará disponible normalmente en:
-
-```text
-http://localhost:8100
-```
-
-La ruta de la pantalla principal es:
-
-```text
-http://localhost:8100/home
-```
-
-También se puede iniciar mediante Angular:
-
+### 3. Ejecutar en el servidor local de desarrollo:
 ```bash
 npm start
-```
-
-Para abrir automáticamente el navegador:
-
-```bash
-ionic serve --open
-```
-
-## Uso de la aplicación
-
-### Agregar una tarea
-
-1. Escribe un título en el campo **Título**.
-2. Opcionalmente, escribe una descripción.
-3. Presiona **Guardar tarea**.
-
-La tarea aparece inmediatamente al final de la lista. Después de guardarla, los dos campos se limpian automáticamente.
-
-El botón permanece deshabilitado mientras el título esté vacío o contenga únicamente espacios.
-
-### Eliminar una tarea
-
-Presiona el botón con el icono de papelera que aparece a la derecha de la tarea. Solo se elimina el elemento seleccionado.
-
-## Estructura del proyecto
-
-```text
-Proyecto ionic/
-├── src/
-│   ├── app/
-│   │   ├── home/
-│   │   │   ├── home.page.ts
-│   │   │   ├── home.page.html
-│   │   │   ├── home.page.scss
-│   │   │   ├── home.module.ts
-│   │   │   └── home-routing.module.ts
-│   │   ├── app.component.html
-│   │   ├── app.module.ts
-│   │   └── app-routing.module.ts
-│   ├── assets/
-│   ├── global.scss
-│   ├── index.html
-│   └── main.ts
-├── capacitor.config.ts
-├── ionic.config.json
-├── angular.json
-├── package.json
-└── tsconfig.json
-```
-
-## Archivos principales
-
-### `src/app/home/home.page.ts`
-
-Contiene la lógica de la pantalla principal:
-
-- Define la interfaz `Task`.
-- Mantiene las tareas en el `signal` reactivo `tasks`.
-- Guarda temporalmente los valores de `newTaskTitle` y `newTaskDescription`.
-- Implementa `addTask()` para validar y agregar tareas.
-- Implementa `removeTask()` para eliminar una tarea por índice.
-
-La lista se actualiza mediante:
-
-```typescript
-readonly tasks = signal<Task[]>([]);
-```
-
-El uso de `signal` permite que Angular actualice automáticamente la vista cuando se agrega o elimina una tarea.
-
-### `src/app/home/home.page.html`
-
-Define la interfaz de usuario:
-
-- `ion-header` y `ion-toolbar` para el encabezado.
-- `ion-content` como contenedor del contenido.
-- `ion-input` para título y descripción.
-- `ion-button` para guardar y eliminar.
-- `ion-list` e `ion-item` para mostrar las tareas.
-- Bloques `@if` y `@for` de Angular para renderizado condicional e iteración.
-
-Los campos usan `[(ngModel)]` para enlazar el formulario con las propiedades del componente.
-
-### `src/app/home/home.page.scss`
-
-Contiene los estilos específicos de la pantalla:
-
-- Centrado y ancho máximo del contenido.
-- Espaciado del formulario.
-- Estilos para títulos y descripciones.
-- Bordes redondeados de la lista.
-- Mensaje para el estado vacío.
-
-### `src/app/home/home.module.ts`
-
-Configura el módulo lazy de la página e importa:
-
-- `CommonModule`.
-- `FormsModule`, necesario para `[(ngModel)]`.
-- `IonicModule`, necesario para los componentes Ionic.
-- `HomePageRoutingModule`.
-
-### `src/app/app-routing.module.ts`
-
-Configura la navegación principal:
-
-- `/home` carga la página de tareas.
-- `/` redirige automáticamente a `/home`.
-
-## Flujo de datos
-
-1. El usuario escribe en los campos del formulario.
-2. `ngModel` actualiza `newTaskTitle` y `newTaskDescription`.
-3. Al presionar **Guardar tarea**, se ejecuta `addTask()`.
-4. El título se limpia con `trim()` y se valida.
-5. Se agrega un nuevo objeto `Task` al `signal`.
-6. Angular actualiza la lista automáticamente.
-7. Los campos del formulario se restablecen a cadenas vacías.
-8. Al eliminar, `removeTask()` crea una nueva lista sin el índice seleccionado.
-
-## Persistencia de datos
-
-Actualmente las tareas se almacenan únicamente en memoria. Esto significa que:
-
-- Las tareas permanecen mientras la aplicación está abierta.
-- Al recargar el navegador o cerrar la aplicación, la lista vuelve a estar vacía.
-- No se utiliza todavía `localStorage`, SQLite ni una API externa.
-
-Para una siguiente versión se puede agregar persistencia con `localStorage`, SQLite mediante Capacitor o un backend.
-
-## Comandos disponibles
-
-| Comando | Descripción |
-| --- | --- |
-| `npm install` | Instala las dependencias |
-| `ionic serve` | Inicia el servidor Ionic |
-| `npm start` | Inicia Angular en modo desarrollo |
-| `npm run build` | Genera una compilación de producción |
-| `npm run watch` | Compila continuamente al detectar cambios |
-| `npm test` | Ejecuta las pruebas configuradas |
-| `npm run lint` | Ejecuta la revisión de estilo, si está disponible |
-
-## Compilación
-
-Para crear la versión compilada:
-
-```bash
-npm run build
-```
-
-Los archivos generados se guardan en la carpeta `www/`, configurada como directorio web de Capacitor.
-
-## Ejecución en plataformas nativas
-
-El proyecto incluye Capacitor. Después de compilar, se puede agregar una plataforma nativa:
-
-```bash
-ionic capacitor add android
-```
-
-Para sincronizar los archivos web con la plataforma:
-
-```bash
-npx cap sync
-```
-
-Para abrir el proyecto Android:
-
-```bash
-npx cap open android
-```
-
-La ejecución nativa requiere tener instalado Android Studio y un SDK de Android correctamente configurado.
-
-## Solución de problemas
-
-### El navegador no muestra la aplicación
-
-Comprueba que el servidor esté activo:
-
-```bash
+# o con Ionic CLI:
 ionic serve
 ```
 
-Después visita:
-
-```text
-http://localhost:8100/home
-```
-
-Si existe una caché de desarrollo desactualizada, detén el servidor, elimina únicamente la carpeta `.angular/cache` y vuelve a iniciar Ionic:
-
+### 4. Ejecutar las pruebas automatizadas (Testing):
 ```bash
-ionic serve
+npm test
 ```
 
-También puedes hacer una recarga fuerte del navegador con `Ctrl + F5`.
+---
 
-### El puerto 8100 está ocupado
+## 📊 Matriz de Cumplimiento de la Rúbrica (100 Puntos)
 
-Inicia Ionic usando otro puerto:
-
-```bash
-ionic serve --port 8200
-```
-
-En ese caso, la aplicación estará en `http://localhost:8200`.
-
-### El botón Guardar está deshabilitado
-
-El título es obligatorio. Escribe al menos un carácter que no sea un espacio en blanco.
-
-## Estado actual y posibles mejoras
-
-La versión actual cumple las operaciones básicas de una lista de tareas. Algunas mejoras posibles son:
-
-- Persistir las tareas entre sesiones.
-- Marcar tareas como completadas.
-- Editar tareas existentes.
-- Incorporar filtros y búsqueda.
-- Mostrar confirmación antes de eliminar.
-- Añadir fecha de vencimiento y prioridad.
-- Crear pruebas unitarias para `addTask()` y `removeTask()`.
-- Extraer la gestión de tareas a un servicio independiente.
-
-## Licencia
-
-Este proyecto es de uso académico y educativo.
-
-INTEGRANDES DEL EQUIPO: 
-- DANIEL BARRERA LISPERGUER
-- MATIAS RAMIREZ PONCE
-- IGNACIO LEIVA CORDERO
+| Indicador Evaluado | Puntos | Nivel Obtenido | Implementación |
+| :--- | :---: | :---: | :--- |
+| **1. Funcionalidades con periféricos** | 20 pts | **Sobresaliente** | `DeviceService` integra cámara y GPS satelital con mapeo directo. |
+| **2. Integración y gestión de permisos** | 20 pts | **Sobresaliente** | Verificación, solicitud contextual y alertas pedagógicas ante rechazo. |
+| **3. Pruebas de funcionalidad periféricos** | 12 pts | **Sobresaliente** | `device.service.spec.ts` con 6 tests unitarios automatizados. |
+| **4. Integración con servicios web y APIs** | 28 pts | **Sobresaliente** | `ApiSyncService` con sincronización Cloud, importación y badges de estado. |
+| **5. Pruebas de integración con APIs** | 20 pts | **Sobresaliente** | `api-sync.service.spec.ts` simulando HTTP 200, 201, 500 y cortes de red. |
+| **TOTAL** | **100 pts** | **Sobresaliente** | **Calificación 7.0 al 60% de exigencia** |

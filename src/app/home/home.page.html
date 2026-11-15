@@ -1,64 +1,250 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>Lista de tareas</ion-title>
+  <ion-toolbar color="primary">
+    <ion-title>
+      <div class="header-title-flex">
+        <ion-icon name="clipboard-outline"></ion-icon>
+        <span>Lista de tareas v2</span>
+      </div>
+    </ion-title>
+
+    <ion-buttons slot="end">
+      <!-- Botón de Sincronización Manual con API externa -->
+      <ion-button (click)="handleSync()" [disabled]="isSyncing" aria-label="Sincronizar tareas">
+        <ion-icon slot="icon-only" name="sync-outline" [class.rotating]="isSyncing"></ion-icon>
+      </ion-button>
+
+      <!-- Selector de Usuario Multi-cuenta -->
+      <ion-button (click)="openUserMenu()" aria-label="Perfil de usuario">
+        <ion-icon slot="start" name="person-circle-outline"></ion-icon>
+        <span class="user-chip-text">{{ currentUser().name.split(' ')[0] }}</span>
+      </ion-button>
+    </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
   <div class="page-wrapper">
+    <!-- FORMULARIO DE REGISTRO / EDICIÓN -->
     <section class="task-form" aria-labelledby="new-task-heading">
-      <h1 id="new-task-heading">Nueva tarea</h1>
+      <div class="form-header-flex">
+        <h1 id="new-task-heading">{{ isEditing ? 'Editar tarea' : 'Nueva tarea' }}</h1>
+        @if (isEditing) {
+          <ion-badge color="warning">Modo Edición</ion-badge>
+        }
+      </div>
 
-      <ion-item>
+      <!-- Título -->
+      <ion-item lines="none" class="custom-input-item">
         <ion-input
-          label="Título"
+          label="Título *"
           labelPlacement="stacked"
-          placeholder="Ej. Comprar víveres"
+          placeholder="Ej. Inspección técnica en terreno"
           [(ngModel)]="newTaskTitle"
-          (keyup.enter)="addTask()"
+          (keyup.enter)="saveTask()"
+          maxlength="60"
         ></ion-input>
       </ion-item>
 
-      <ion-item>
+      <!-- Descripción -->
+      <ion-item lines="none" class="custom-input-item">
         <ion-input
-          label="Descripción"
+          label="Descripción (opcional)"
           labelPlacement="stacked"
-          placeholder="Añade detalles (opcional)"
+          placeholder="Añade detalles o notas adicionales..."
           [(ngModel)]="newTaskDescription"
-          (keyup.enter)="addTask()"
+          (keyup.enter)="saveTask()"
+          maxlength="150"
         ></ion-input>
       </ion-item>
 
-      <ion-button expand="block" (click)="addTask()" [disabled]="!newTaskTitle.trim()">
-        <ion-icon name="add-outline" slot="start"></ion-icon>
-        Guardar tarea
-      </ion-button>
+      <!-- SECCIÓN DE PERIFÉRICOS (CÁMARA Y GPS) -->
+      <div class="peripherals-box">
+        <span class="peripherals-label">Periféricos del dispositivo</span>
+
+        <div class="peripherals-buttons-row">
+          <!-- Botón Cámara -->
+          <ion-button
+            fill="outline"
+            size="small"
+            class="periph-btn"
+            (click)="handleTakePhoto()"
+            [disabled]="isCapturingPhoto"
+          >
+            <ion-icon name="camera-outline" slot="start"></ion-icon>
+            {{ photoUri ? 'Cambiar foto' : 'Tomar foto' }}
+            @if (isCapturingPhoto) {
+              <ion-spinner name="dots" slot="end"></ion-spinner>
+            }
+          </ion-button>
+
+          <!-- Botón GPS -->
+          <ion-button
+            fill="outline"
+            size="small"
+            class="periph-btn"
+            (click)="handleGetLocation()"
+            [disabled]="isGettingLocation"
+          >
+            <ion-icon name="location-outline" slot="start"></ion-icon>
+            {{ currentLocation ? 'Actualizar GPS' : 'Obtener GPS' }}
+            @if (isGettingLocation) {
+              <ion-spinner name="dots" slot="end"></ion-spinner>
+            }
+          </ion-button>
+        </div>
+
+        <!-- Previsualización de Foto Adjunta -->
+        @if (photoUri) {
+          <div class="photo-preview-box">
+            <img [src]="photoUri" alt="Evidencia capturada" class="preview-img" />
+            <div class="preview-overlay">
+              <span><ion-icon name="image-outline"></ion-icon> Foto adjunta</span>
+              <ion-button fill="clear" color="danger" size="small" (click)="removePhoto()">
+                <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        }
+
+        <!-- Previsualización de Coordenadas GPS -->
+        @if (currentLocation) {
+          <div class="gps-preview-card">
+            <div class="gps-info">
+              <ion-icon name="navigate-outline" class="gps-icon"></ion-icon>
+              <div>
+                <strong>GPS Registrado:</strong>
+                <p>{{ currentLocation.latitude.toFixed(5) }}, {{ currentLocation.longitude.toFixed(5) }}</p>
+                @if (currentLocation.accuracy) {
+                  <small>Precisión: ±{{ currentLocation.accuracy.toFixed(1) }}m</small>
+                }
+              </div>
+            </div>
+            <div class="gps-actions">
+              <ion-button size="small" fill="outline" color="primary" (click)="openMaps(currentLocation.mapsUrl)">
+                Ver mapa
+              </ion-button>
+              <ion-button size="small" fill="clear" color="danger" (click)="removeLocation()">
+                <ion-icon name="close-circle-outline" slot="icon-only"></ion-icon>
+              </ion-button>
+            </div>
+          </div>
+        }
+      </div>
+
+      <!-- Botones de Acción -->
+      <div class="form-actions-stack">
+        <ion-button
+          expand="block"
+          (click)="saveTask()"
+          [disabled]="!newTaskTitle.trim()"
+          color="primary"
+        >
+          <ion-icon [name]="isEditing ? 'save-outline' : 'add-outline'" slot="start"></ion-icon>
+          {{ isEditing ? 'Guardar cambios' : 'Guardar tarea' }}
+        </ion-button>
+
+        @if (isEditing) {
+          <ion-button expand="block" fill="outline" color="medium" (click)="cancelEdit()">
+            <ion-icon name="arrow-undo-outline" slot="start"></ion-icon>
+            Cancelar edición
+          </ion-button>
+        }
+      </div>
     </section>
 
-    <section aria-labelledby="tasks-heading">
-      <h2 id="tasks-heading">Mis tareas</h2>
+    <!-- LISTADO DE TAREAS -->
+    <section aria-labelledby="tasks-heading" class="tasks-section">
+      <div class="tasks-header-flex">
+        <div>
+          <h2 id="tasks-heading">Mis tareas</h2>
+          <ion-badge color="medium" class="tasks-count-badge">
+            {{ tasks().length }} {{ tasks().length === 1 ? 'tarea' : 'tareas' }}
+          </ion-badge>
+        </div>
+
+        <!-- Botón para importar tareas de API externa -->
+        <ion-button size="small" fill="outline" color="secondary" (click)="handleImport()">
+          <ion-icon name="cloud-download-outline" slot="start"></ion-icon>
+          Importar de API
+        </ion-button>
+      </div>
 
       @if (tasks().length === 0) {
-        <p class="empty-state">Todavía no tienes tareas. ¡Añade la primera!</p>
+        <div class="empty-state-box">
+          <ion-icon name="checkmark-done-circle-outline" class="empty-icon"></ion-icon>
+          <p class="empty-title">¡No tienes tareas registradas!</p>
+          <p class="empty-desc">Crea una nueva tarea con foto y GPS, o importa tareas desde la API externa.</p>
+        </div>
       } @else {
-        <ion-list lines="full">
-          @for (task of tasks(); track $index) {
-            <ion-item>
-              <ion-label>
-                <h3>{{ task.title }}</h3>
+        <ion-list lines="full" class="tasks-list">
+          @for (task of tasks(); track task.id) {
+            <ion-item class="task-list-item" [class.is-completed]="task.completed">
+              <!-- Checkbox completado -->
+              <ion-checkbox
+                slot="start"
+                [checked]="task.completed"
+                (ionChange)="toggleTaskStatus(task)"
+                aria-label="Completar tarea"
+              ></ion-checkbox>
+
+              <!-- Miniatura fotográfica -->
+              @if (task.photoUri) {
+                <ion-thumbnail slot="start" class="task-thumb">
+                  <img [src]="task.photoUri" alt="Foto tarea" />
+                </ion-thumbnail>
+              }
+
+              <!-- Información de la tarea -->
+              <ion-label class="ion-text-wrap">
+                <h3 class="task-item-title">{{ task.title }}</h3>
                 @if (task.description) {
-                  <p>{{ task.description }}</p>
+                  <p class="task-item-desc">{{ task.description }}</p>
                 }
+
+                <!-- Badges de Estado, Sincronización y GPS -->
+                <div class="task-badges-row">
+                  <ion-badge [color]="task.completed ? 'success' : 'medium'" class="meta-tag">
+                    {{ task.completed ? 'Completada' : 'Pendiente' }}
+                  </ion-badge>
+
+                  <ion-badge [color]="task.synced ? 'success' : 'warning'" class="meta-tag sync-tag">
+                    <ion-icon [name]="task.synced ? 'cloud-done-outline' : 'cloud-upload-outline'"></ion-icon>
+                    {{ task.synced ? 'Sincronizado' : 'Pendiente Sync' }}
+                  </ion-badge>
+
+                  @if (task.location) {
+                    <ion-badge
+                      color="tertiary"
+                      class="meta-tag gps-tag"
+                      (click)="openMaps(task.location.mapsUrl)"
+                    >
+                      <ion-icon name="location-outline"></ion-icon>
+                      GPS: {{ task.location.latitude | number:'1.2-2' }}, {{ task.location.longitude | number:'1.2-2' }}
+                    </ion-badge>
+                  }
+                </div>
               </ion-label>
-              <ion-button
-                fill="clear"
-                color="danger"
-                slot="end"
-                [attr.aria-label]="'Eliminar tarea ' + task.title"
-                (click)="removeTask($index)"
-              >
-                <ion-icon name="trash-outline"></ion-icon>
-              </ion-button>
+
+              <!-- Botones de Acción (Editar y Eliminar) -->
+              <div slot="end" class="task-action-buttons">
+                <ion-button
+                  fill="clear"
+                  color="primary"
+                  (click)="startEdit(task)"
+                  [attr.aria-label]="'Editar tarea ' + task.title"
+                >
+                  <ion-icon name="create-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+
+                <ion-button
+                  fill="clear"
+                  color="danger"
+                  (click)="confirmDelete(task)"
+                  [attr.aria-label]="'Eliminar tarea ' + task.title"
+                >
+                  <ion-icon name="trash-outline" slot="icon-only"></ion-icon>
+                </ion-button>
+              </div>
             </ion-item>
           }
         </ion-list>

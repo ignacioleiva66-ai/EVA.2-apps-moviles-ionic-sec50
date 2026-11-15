@@ -1,3 +1,30 @@
+.header-title-flex {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+
+  ion-icon {
+    font-size: 1.3rem;
+  }
+}
+
+.user-chip-text {
+  font-size: 0.85rem;
+  font-weight: 600;
+  margin-left: 4px;
+}
+
+.rotating {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
 .page-wrapper {
   max-width: 720px;
   margin: 0 auto;
@@ -8,44 +35,248 @@
   padding: 0.5rem 0 1.5rem;
 }
 
-.task-form ion-item {
+.form-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+
+  h1 {
+    margin: 0;
+  }
+}
+
+.custom-input-item {
   --padding-start: 0;
   --inner-padding-end: 0;
   margin-bottom: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid var(--ion-color-light-shade, #e2e8f0);
+  padding: 4px 12px;
 }
 
-h1,
-h2 {
-  font-weight: 700;
+/* Sección de Periféricos */
+.peripherals-box {
+  margin: 1rem 0;
+  padding: 0.85rem;
+  background: var(--ion-color-light, #f8fafc);
+  border-radius: 10px;
+  border: 1px dashed var(--ion-color-medium, #94a3b8);
+
+  .peripherals-label {
+    display: block;
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--ion-color-dark, #1e293b);
+    margin-bottom: 0.5rem;
+  }
+
+  .peripherals-buttons-row {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+
+    .periph-btn {
+      flex: 1;
+      min-width: 140px;
+    }
+  }
+
+  .photo-preview-box {
+    position: relative;
+    margin-top: 0.75rem;
+    border-radius: 8px;
+    overflow: hidden;
+    border: 1px solid var(--ion-color-medium-tint, #cbd5e1);
+
+    .preview-img {
+      width: 100%;
+      max-height: 200px;
+      object-fit: cover;
+      display: block;
+    }
+
+    .preview-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(15, 23, 42, 0.75);
+      color: #ffffff;
+      padding: 4px 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+  }
+
+  .gps-preview-card {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: #ffffff;
+    padding: 8px 12px;
+    border-radius: 8px;
+    margin-top: 0.75rem;
+    border-left: 4px solid var(--ion-color-primary, #3880ff);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+
+    .gps-info {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+
+      .gps-icon {
+        font-size: 1.4rem;
+        color: var(--ion-color-primary, #3880ff);
+      }
+
+      strong {
+        font-size: 0.8rem;
+        color: #475569;
+      }
+
+      p {
+        margin: 0;
+        font-size: 0.85rem;
+        font-weight: 600;
+      }
+
+      small {
+        font-size: 0.75rem;
+        color: #64748b;
+      }
+    }
+
+    .gps-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+  }
 }
 
-h1 {
-  font-size: 1.5rem;
+.form-actions-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
 }
 
-h2 {
-  font-size: 1.25rem;
-  margin: 0 0 0.75rem;
+/* Listado de Tareas */
+.tasks-section {
+  margin-top: 1rem;
+
+  .tasks-header-flex {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 0.75rem;
+
+    h2 {
+      display: inline-block;
+      margin: 0;
+      font-size: 1.25rem;
+      font-weight: 700;
+    }
+
+    .tasks-count-badge {
+      margin-left: 8px;
+      font-size: 0.75rem;
+    }
+  }
+
+  .tasks-list {
+    border-radius: 0.75rem;
+    overflow: hidden;
+    background: transparent;
+  }
+
+  .task-list-item {
+    --padding-start: 8px;
+    --inner-padding-end: 0;
+    margin-bottom: 0.5rem;
+    border-radius: 8px;
+    border: 1px solid var(--ion-color-light-shade, #e2e8f0);
+
+    &.is-completed {
+      opacity: 0.75;
+      .task-item-title {
+        text-decoration: line-through;
+        color: var(--ion-color-medium, #94a3b8);
+      }
+    }
+
+    .task-thumb {
+      --size: 46px;
+      --border-radius: 6px;
+      margin-right: 8px;
+
+      img {
+        object-fit: cover;
+      }
+    }
+
+    .task-item-title {
+      font-size: 1rem;
+      font-weight: 600;
+      margin: 0 0 0.25rem;
+    }
+
+    .task-item-desc {
+      font-size: 0.85rem;
+      color: var(--ion-color-medium, #64748b);
+      margin: 0 0 0.5rem;
+    }
+
+    .task-badges-row {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 6px;
+
+      .meta-tag {
+        font-size: 0.68rem;
+        padding: 3px 6px;
+        border-radius: 4px;
+        display: inline-flex;
+        align-items: center;
+        gap: 3px;
+      }
+
+      .gps-tag {
+        cursor: pointer;
+      }
+    }
+
+    .task-action-buttons {
+      display: flex;
+      align-items: center;
+    }
+  }
 }
 
-ion-list {
-  border-radius: 0.75rem;
-  overflow: hidden;
-}
-
-ion-item h3 {
-  font-size: 1rem;
-  font-weight: 600;
-  margin: 0 0 0.25rem;
-}
-
-ion-item p {
-  color: var(--ion-color-medium);
-  margin: 0;
-}
-
-.empty-state {
-  color: var(--ion-color-medium);
+.empty-state-box {
   text-align: center;
-  padding: 2rem 1rem;
+  padding: 2.5rem 1rem;
+  color: var(--ion-color-medium, #64748b);
+
+  .empty-icon {
+    font-size: 3.5rem;
+    color: var(--ion-color-medium-tint, #cbd5e1);
+    margin-bottom: 0.5rem;
+  }
+
+  .empty-title {
+    font-weight: 700;
+    font-size: 1.1rem;
+    color: var(--ion-color-dark, #1e293b);
+    margin: 0 0 0.25rem;
+  }
+
+  .empty-desc {
+    margin: 0;
+    font-size: 0.85rem;
+  }
 }
